@@ -48,7 +48,8 @@ class StoringHandler(MidiInHandler):
     def __init__(self, usb_device, channel=1, controllers=None, **kwargs):
         self.ch = channel - 1  # first ch is 0
         self.ccs = controllers or ()
-        self.usb_device:FinalDevice = usb_device  # cc:value storage
+        # annotate with a forward reference to avoid circular import issues
+        self.usb_device: "FinalDevice" = usb_device  # cc:value storage
         # todo: integrate this session with usb device class
         # add multiple channel support if necessary
         super().__init__()

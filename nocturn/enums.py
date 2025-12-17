@@ -46,7 +46,7 @@ class MyField:
 
 
 class MyEnumMeta(type):
-    def __new__(cls, name, bases, attrs: list[MyField]):
+    def __new__(cls, name, bases, attrs: dict):
         # Access and potentially merge class attribute dictionaries
         merged_attrs = {}
         for base in bases:
@@ -100,11 +100,11 @@ class MyEnum(MyField, metaclass=MyEnumMeta):
 
 def args_or_list_of_args(func):
     def inner(cls, *args, **kwargs):
-        if isinstance(args[0], list) and len(args) == 1:
+        if len(args) == 1 and isinstance(args[0], list):
             return [
                 func(cls, e, **kwargs)
-                if not isinstance(e,(tuple,list))
-                else func(cls,*e,**kwargs)
+                if not isinstance(e, (tuple, list))
+                else func(cls, *e, **kwargs)
                 for e in args[0]
             ]
         return func(cls, *args, **kwargs)
@@ -144,6 +144,7 @@ class BatchCommands(SingleCommands):
     Brightness_full = "send", 0, 127
 
 
-RawReadCommand = list[int, int, int]
-RawWriteCommand = list[int, int]
-ParsedCommand = list[SingleCommands, int, int]
+# Typing aliases: use tuple for fixed-length command representations
+RawReadCommand = tuple[int, int, int]
+RawWriteCommand = tuple[int, int]
+ParsedCommand = tuple[SingleCommands, int, int]

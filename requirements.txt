@@ -1,3 +1,6 @@
-libusb # pyusb dependency
-pyusb
-python-rtmidi # wheels available only for python3.11..12
+# pyusb provides the `usb` package
+pyusb>=1.2.1
+# rtmidi bindings: prefer `rtmidi` wheel which supports modern Python versions
+# if you prefer the other package, replace with `python-rtmidi==<version>` that fits your platform
+rtmidi>=1.2.0
+# System dependency: libusb (libusb-1.0) required on macOS/Linux

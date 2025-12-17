@@ -1,6 +1,6 @@
-from usb_client import dev, SingleCommands, ParsedCommand,listen_and_output_midi
-from midi_client import startup
-from rtmidi.midiconstants import * # midi reference list
+from .usb_client import dev, SingleCommands, ParsedCommand, listen_and_output_midi
+from .midi_client import startup
+from rtmidi.midiconstants import *  # midi reference list
 
 # todo:
 #  config1:
@@ -34,6 +34,11 @@ def func(arg: ParsedCommand):
 
 
 midiin, midiout = startup()
+
+# expose midi objects to the usb_client module so its handlers can use them
+from . import usb_client as usb_client_mod
+usb_client_mod.midiout = midiout
+usb_client_mod.midiin = midiin
 
 dev.looping_func = listen_and_output_midi
 dev.loop_blocking()

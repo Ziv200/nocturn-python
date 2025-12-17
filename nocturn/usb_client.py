@@ -2,7 +2,7 @@ from typing import Callable
 from unittest import result
 import usb.core
 import usb.util
-from enums import *
+from .enums import *
 import time
 import itertools
 from rtmidi.midiconstants import NOTE_ON, CONTROL_CHANGE  # midi reference list
@@ -222,9 +222,10 @@ class StatefulMixin:
         result[k] = v
 
     def get(self,k,default):
+        result, key = self.__get_set_handler(k)
         try:
-            r=result[k]
-        except KeyError:
+            r = result[key]
+        except (KeyError, IndexError):
             r = default
         return r
 
